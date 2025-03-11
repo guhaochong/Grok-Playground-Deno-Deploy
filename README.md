@@ -19,7 +19,7 @@ Grok Playground 是一个代理服务应用，允许用户通过 Deno Deploy 部
 
 ### 部署步骤
 
-1. **新建项目仓库**
+1. **新建项目仓库 或 Fork此项目**
    - 将 **`src`** 文件夹 放到你的新仓库中，并且编辑修改 **`src/static/users.json`** 中的变量
 2. **登录 Deno Deploy**
    - 使用 GitHub 账号登录 [Deno Deploy](https://deno.com/deploy)
