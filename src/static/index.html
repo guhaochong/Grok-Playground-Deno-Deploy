@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrokPlayground</title>
+    <!-- 引入 Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        header {
+            background: linear-gradient(135deg, #007bff, #40c4ff);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin: 0;
+            font-size: 36px;
+            color: white;
+            background: linear-gradient(90deg, #fff, #e6f7ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: transform 0.3s ease;
+        }
+        h1:hover {
+            transform: scale(1.05) rotate(1deg);
+        }
+        h2 {
+            color: #007bff;
+            margin: 20px 0;
+            font-size: 24px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .accounts-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .account {
+            border: 2px solid #007bff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+        .account:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .account.selected {
+            background-color: #e6f7ff;
+        }
+        .radio-container {
+            display: flex;
+            align-items: center;
+        }
+        .radio-container input[type="radio"] {
+            transform: scale(1.5);
+            margin-right: 15px;
+            accent-color: #007bff;
+        }
+        .radio-container label {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+        }
+        .radio-container i {
+            margin-right: 10px;
+            color: #007bff;
+        }
+        .selected-section {
+            padding: 20px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #007bff, #40c4ff);
+            color: white;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .selected-section:hover {
+            transform: scale(1.02);
+        }
+        .selected-section h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        #selected-account-info {
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .grok-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        .grok-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #40a9ff, #007bff);
+        }
+        #password-section {
+            text-align: center;
+            margin: 150px auto;
+            max-width: 400px;
+        }
+        #password-input {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        #submit-password {
+            padding: 12px 30px;
+            font-size: 16px;
+        }
+        #error-message {
+            color: #ff4d4f;
+            margin-top: 15px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 14px;
+        }
+        /* 手机端优化 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 10px;
+            }
+            .accounts-section, .selected-section {
+                width: 100%;
+            }
+            .account {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="password-section">
+        <h2>请输入密码</h2>
+        <input type="password" id="password-input" placeholder="请输入密码">
+        <button id="submit-password">提交</button>
+        <p id="error-message" style="display: none;">密码错误</p>
+    </div>
+
+    <div id="main-content-section" style="display: none;">
+        <header>
+            <div class="container">
+                <h1>GrokPlayground</h1>
+                <a href="/grok" id="grok-link" class="grok-link" target="_blank">
+                    <strong>🚀 点击前往 Grok 聊天页面 🚀</strong>
+                </a>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="main-content">
+                <div class="accounts-section">
+                    <h2>选择账户</h2>
+                    <div id="accounts-container"></div>
+                </div>
+                <div class="selected-section">
+                    <h2>当前选中的账户</h2>
+                    <div id="selected-account-info">未选择任何账户</div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>By Guhaochong | Ver 0.2</p>
+        </footer>
+    </div>
+
+    <script>
+        let users = [];
+        let selectedUserId = null;
+
+        function decodeBase64(str) {
+            return atob(str);
+        }
+
+        async function loadUsers() {
+            try {
+                const response = await fetch('/users.json');
+                if (!response.ok) throw new Error('Failed to fetch users.json');
+                const data = await response.json();
+                return {
+                    password: decodeBase64(data.password),
+                    users: data.users.map(user => ({
+                        id: user.username,
+                        username: decodeBase64(user.username),
+                        cookie: decodeBase64(user.cookie)
+                    }))
+                };
+            } catch (error) {
+                console.error('Error loading users:', error);
+                alert('加载用户数据失败，请检查 users.json');
+            }
+        }
+
+        function setGrokLink() {
+            const grokLink = document.getElementById('grok-link');
+            grokLink.href = '/grok';
+        }
+
+        function renderAccounts() {
+            const container = document.getElementById('accounts-container');
+            container.innerHTML = '';
+            users.forEach(user => {
+                const accountDiv = document.createElement('div');
+                accountDiv.className = 'account';
+                if (user.id === selectedUserId) {
+                    accountDiv.classList.add('selected');
+                }
+
+                const radioContainer = document.createElement('div');
+                radioContainer.className = 'radio-container';
+
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'account';
+                radio.id = `account-${user.id}`;
+                radio.checked = user.id === selectedUserId;
+                radio.addEventListener('change', () => selectUser(user.id));
+
+                const label = document.createElement('label');
+                label.htmlFor = `account-${user.id}`;
+                label.innerHTML = `<i class="fas fa-user"></i> ${user.username}`;
+
+                radioContainer.appendChild(radio);
+                radioContainer.appendChild(label);
+                accountDiv.appendChild(radioContainer);
+                container.appendChild(accountDiv);
+            });
+        }
+
+        function selectUser(id) {
+    selectedUserId = id;
+    const selectedUser = users.find(user => user.id === id);
+    if (selectedUser) {
+        setTimeout(() => {
+            document.cookie = `grok_cookie=${encodeURIComponent(selectedUser.cookie)}; path=/; max-age=31536000`;
+            updateSelectedAccountDiv();
+        }, 1000); // 添加 1 秒延迟
+    }
+}
+
+        function updateSelectedAccountDiv() {
+            const infoDiv = document.getElementById('selected-account-info');
+            if (!selectedUserId) {
+                infoDiv.textContent = '未选择任何账户';
+                return;
+            }
+            const selectedUser = users.find(user => user.id === selectedUserId);
+            infoDiv.textContent = selectedUser.username;
+        }
+
+        document.getElementById('submit-password').addEventListener('click', async () => {
+            const password = document.getElementById('password-input').value;
+            const data = await loadUsers();
+            if (data && data.password === password) {
+                users = data.users;
+                document.getElementById('password-section').style.display = 'none';
+                document.getElementById('main-content-section').style.display = 'block';
+                renderAccounts();
+                if (users.length > 0) {
+                    selectUser(users[0].id);
+                }
+            } else {
+                document.getElementById('error-message').style.display = 'block';
+            }
+        });
+
+        window.addEventListener('load', () => {
+            setGrokLink();
+        });
+    </script>
+</body>
+</html>
