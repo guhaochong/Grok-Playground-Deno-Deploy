@@ -61,10 +61,9 @@ Grok Playground 是一个代理服务应用，允许用户通过 Deno Deploy 部
 
      
 
-2. 
-     使用 Deno Deploy 提供的域名访问应用（例如：`https://your-project-name.deno.dev`）
+2. 使用 Deno Deploy 提供的域名访问应用（ 例如：**`https://your-project-name.deno.dev`** ）
 
-3. 使用 `123` 密码登录后，选择指定的账号即可使用 Grok 功能
+3. 使用 **`123`** 密码登录后，选择指定的账号即可使用 Grok 功能
 
 4. 支持多账户切换使用，请自行添加相应变量即可
 
@@ -74,7 +73,7 @@ Grok Playground 是一个代理服务应用，允许用户通过 Deno Deploy 部
 2. 打开浏览器开发者工具（F12）
 3. 在网络或应用标签页中找到 cookie 信息
 4. 复制 grok_cookie 的值
-5. 将此值粘贴到 Grok Playground 的相应设置中
+5. 将此值粘贴到 users.json 的对应参数中
 
 ## 注意事项
 
